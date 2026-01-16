@@ -21,7 +21,6 @@ exports.sendMail = async (req, res) => {
 
         console.log("Message sent: %s", info.messageId);
 
-        // Для Ethereal мы можем получить URL для предпросмотра
         const previewUrl = nodemailer.getTestMessageUrl(info);
         if (previewUrl) {
             console.log("Preview URL: %s", previewUrl);
