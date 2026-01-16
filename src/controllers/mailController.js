@@ -12,7 +12,7 @@ exports.sendMail = async (req, res) => {
         const transporter = await createTransporter();
 
         const info = await transporter.sendMail({
-            from: '"Mailer Service" <no-reply@example.com>',
+            from: `"Mailer Service" <${process.env.SMTP_USER}>`,
             to,
             subject,
             text,
