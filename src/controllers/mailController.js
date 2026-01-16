@@ -2,6 +2,7 @@ const createTransporter = require('../config/transporter');
 const nodemailer = require("nodemailer");
 
 exports.sendMail = async (req, res) => {
+
     try {
         const { to, subject, text, html } = req.body;
 
