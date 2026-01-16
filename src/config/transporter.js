@@ -1,8 +1,7 @@
 const nodemailer = require("nodemailer");
 
 const createTransporter = async () => {
-    // Для тестовых целей используем Ethereal
-    // В продакшене тут будет логика для Gmail/Sendgrid из ENV
+
     if (process.env.NODE_ENV !== 'production') {
         const testAccount = await nodemailer.createTestAccount();
 
@@ -20,7 +19,6 @@ const createTransporter = async () => {
         });
     }
 
-    // Продакшен конфиг
     return nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
