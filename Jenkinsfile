@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_USER = '1t1scool' 
+        IMAGE_NAME = 'mailer'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        FULL_IMAGE = "${DOCKER_HUB_USER}/${IMAGE_NAME}:${IMAGE_TAG}"
+        LATEST_IMAGE = "${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+        DOCKER_HUB_CREDS = 'dockerhub'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build & Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDS}", 
+                                 usernameVariable: 'USER', 
+                                 passwordVariable: 'PASS')]) {
+                    sh """
+                        docker build -t ${FULL_IMAGE} -t ${LATEST_IMAGE} .
+                        echo \$PASS | docker login -u \$USER --password-stdin
+                        docker push ${FULL_IMAGE}
+                        docker push ${LATEST_IMAGE}
+                    """
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh """
+                    sed -i "s|image: .*|image: ${FULL_IMAGE}|g" kubernetes/deployment.yaml
+                    kubectl apply -k kubernetes/
+                """
+            }
+        }
+    }
+}

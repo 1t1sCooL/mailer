@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailer
+  template:
+    metadata:
+      labels:
+        app: mailer
+    spec:
+      containers:
+        - name: mailer
+          image: 1t1scool/mailer:latest
+          ports:
+            - containerPort: 4000
+          env:
+            - name: PORT
+              value: "4000"
+            - name: SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mailer-secrets
+                  key: SMTP_HOST
+            - name: SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mailer-secrets
+                  key: SMTP_PORT
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mailer-secrets
+                  key: SMTP_USER
+            - name: SMTP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mailer-secrets
+                  key: SMTP_PASS
+            - name: SMTP_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: mailer-secrets
+                  key: SMTP_SECURE

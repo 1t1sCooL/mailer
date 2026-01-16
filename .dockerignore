@@ -1,0 +1,17 @@
+node_modules
+.env
+npm-debug.log
+logs
+*.log
+.git
+.gitignore
+Dockerfile
+Jenkinsfile
+kubernetes/
+create_secret.ps1
+README.md
+.vscode
+.idea
+
+.env.example
+create_secret.ps1
