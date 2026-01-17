@@ -13,10 +13,18 @@ app.use(cors());
 app.use(express.json());
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100 // limit each IP to 100 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 100
 });
 app.use(limiter);
+
+app.use((req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey || apiKey !== process.env.MAILER_API_KEY) {
+        return res.status(401).json({ error: "Unauthorized: Invalid API Key" });
+    }
+    next();
+});
 
 app.use("/api", mailRoutes);
 
