@@ -18,8 +18,15 @@ spec:
           ports:
             - containerPort: 4000
           env:
+            - name: NODE_ENV
+              value: "production"
             - name: PORT
               value: "4000"
+            - name: MAILER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mailer-secrets
+                  key: MAILER_API_KEY
             - name: SMTP_HOST
               valueFrom:
                 secretKeyRef:
