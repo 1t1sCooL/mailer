@@ -12,7 +12,7 @@ exports.sendMail = async (req, res) => {
         const transporter = await createTransporter();
 
         const info = await transporter.sendMail({
-            from: '"Mailer Service" <no-reply@example.com>',
+            from: `mmalabugin.ru Mailer Service" <${process.env.SMTP_USER}>`,
             to,
             subject,
             text,
@@ -21,7 +21,6 @@ exports.sendMail = async (req, res) => {
 
         console.log("Message sent: %s", info.messageId);
 
-        // Для Ethereal мы можем получить URL для предпросмотра
         const previewUrl = nodemailer.getTestMessageUrl(info);
         if (previewUrl) {
             console.log("Preview URL: %s", previewUrl);
@@ -35,6 +34,9 @@ exports.sendMail = async (req, res) => {
 
     } catch (error) {
         console.error("Error sending email:", error);
-        res.status(500).json({ error: "Failed to send email" });
+        res.status(500).json({
+            error: "Failed to send email",
+            details: error.message
+        });
     }
 };
