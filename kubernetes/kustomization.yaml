@@ -4,9 +4,9 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
 
 images:
   - name: mailer
     newName: 1t1scool/mailer
     newTag: latest
+
